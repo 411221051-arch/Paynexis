@@ -2,7 +2,7 @@ package entity
 
 type RegisterUser struct {
 	Login    string `json:"login"`
-	Password string `json:"password`
+	Password string `json:"password"`
 }
 
 type RegisterResponse struct {

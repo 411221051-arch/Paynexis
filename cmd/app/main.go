@@ -35,7 +35,8 @@ func main() {
 	connStr := os.Getenv("DATABASE_URL")
 	if connStr == "" {
 		connStr = "postgres://user:pass@localhost:5432/mydb?sslmode=disable"
-		log.Fatal("DB URL NOT SET")
+		//log.Fatal("DB URL NOT SET")
+		log.Println("warning: DATABASE_URL not set, using default connection string")
 	}
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -56,7 +57,7 @@ func main() {
 
 	createUsersTable(db)
 
-	//CREATE ADAPTERP
+	//CREATE ADAPTER
 	repo := repository.NewUserRepository(db)
 	srv := service.NewUserService(repo)
 	userHandler := handler.NewUserHandler(srv)

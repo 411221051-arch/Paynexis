@@ -50,7 +50,7 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(entity.LoginSuccessResponse{
-		Status: "sucess",
+		Status: "success",
 		User:   *user,
 		Token:  token,
 	})
@@ -95,7 +95,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(entity.ErrorResponse{
 			Status: "error",
-			Error:  err.Error(),
+			Error:  "failed to create user",
 		})
 		return
 	}
