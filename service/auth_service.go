@@ -10,6 +10,7 @@ import (
 type UserService interface {
 	GetUser(login, password string) (*entity.UserPublicDTO, error)
 	CreateUser(login, password string) (*entity.UserPublicDTO, error)
+	ListUsers() (*entity.ResponseUserList, error)
 }
 
 type userService struct {
@@ -40,4 +41,12 @@ func (s *userService) CreateUser(login, password string) (*entity.UserPublicDTO,
 		return nil, errors.New("login and password required")
 	}
 	return s.repo.CreateUserByData(login, password)
+}
+
+func (s *userService) ListUsers() (*entity.ResponseUserList, error) {
+	users, err := s.repo.ListAllUsers()
+	if err != nil {
+		return nil, err
+	}
+	return &entity.ResponseUserList{Users: users}, nil
 }

@@ -9,3 +9,7 @@ type RegisterResponse struct {
 	Status string        `json:"status"`
 	User   UserPublicDTO `json:"user"`
 }
+
+type ResponseUserList struct {
+	Users []UserPublicDTO `json:"users"`
+}

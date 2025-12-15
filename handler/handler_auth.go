@@ -108,3 +108,19 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		User:   *user,
 	})
 }
+
+func (h *UserHandler) ListUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := h.service.ListUsers()
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(entity.ErrorResponse{
+			Status: "error",
+			Error:  "failed to list users",
+		})
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(users)
+}

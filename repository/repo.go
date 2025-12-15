@@ -11,6 +11,7 @@ import (
 type UserRepository interface {
 	GetUserByLogin(login, password string) (*entity.UserPublicDTO, error)
 	CreateUserByData(login, password string) (*entity.UserPublicDTO, error)
+	ListAllUsers() ([]entity.UserPublicDTO, error)
 }
 
 type userRepository struct {
@@ -47,4 +48,22 @@ func (r *userRepository) CreateUserByData(login, password string) (*entity.UserP
 	}
 	return &user, nil
 
+}
+
+func (r *userRepository) ListAllUsers() ([]entity.UserPublicDTO, error) {
+	rows, err := r.db.Query("SELECT id, login FROM users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var users []entity.UserPublicDTO
+	for rows.Next() {
+		var user entity.UserPublicDTO
+		if err := rows.Scan(&user.ID, &user.Login); err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+	return users, nil
 }

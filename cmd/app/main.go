@@ -90,6 +90,7 @@ func main() {
 
 		r.Post("/login", userHandler.GetUser)
 		r.Post("/register", userHandler.CreateUser)
+		r.Post("/list", userHandler.ListUsers)
 	})
 
 	// Graceful shutdown должен быть ПЕРЕД http.ListenAndServe
