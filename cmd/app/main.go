@@ -69,7 +69,7 @@ func main() {
 	r.Use(middleware.Recoverer)
 
 	//CORS
-	///
+	////
 	// r.Use(cors.Handler(cors.Options{
 	// 	AllowedOrigins: []string{
 	// 		"http://localhost:3000",    // локальный фронт
