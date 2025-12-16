@@ -17,6 +17,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -70,18 +71,20 @@ func main() {
 
 	//CORS
 	////
-	// r.Use(cors.Handler(cors.Options{
-	// 	AllowedOrigins: []string{
-	// 		"http://localhost:3000",    // локальный фронт
-	// 		"http://localhost:5173",    // Vite (если используешь)
-	// 		"https://wvb.onrender.com", // swagger
-	// 		"https://*.vercel.app",     // прод фронт
-	// 	},
-	// 	AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	// 	AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
-	// 	AllowCredentials: true,
-	// 	MaxAge:           300,
-	// }))
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{
+			"http://localhost:3000",    // локальный фронт
+			"http://localhost:5173",    // Vite (если используешь)
+			"https://wvb.onrender.com", // swagger
+			"https://*.vercel.app",     // прод фронт
+			"http://localhost:1313",    // локальный фронт
+
+		},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 	////
 
 	//swagger
