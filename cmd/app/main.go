@@ -76,8 +76,8 @@ func main() {
 			"http://localhost:3000",    // локальный фронт
 			"http://localhost:5173",    // Vite (если используешь)
 			"https://wvb.onrender.com", // swagger
-			"https://*.vercel.app",     // прод фронт
-			"http://localhost:1313",    // локальный фронт
+			//"https://*.vercel.app",     // прод фронт
+			"http://localhost:1313", // локальный фронт
 
 		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
