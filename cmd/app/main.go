@@ -69,6 +69,23 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
+	//health check
+	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+	//DATABASE READY CHECK
+	r.Get("/ready", func(w http.ResponseWriter, r *http.Request) {
+		// Проверяем подключение к БД
+		if err := db.Ping(); err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable) // 503
+			w.Write([]byte("Database unavailable"))
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Ready"))
+	})
+
 	//CORS
 	////
 	r.Use(cors.Handler(cors.Options{
