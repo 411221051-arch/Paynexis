@@ -65,20 +65,34 @@ func main() {
 
 	//NEW ROUTER
 	r := chi.NewRouter()
-	//MIDDLEWARE
+
+	//MIDDLEWARE - должны быть ДО всех routes
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{
+			"http://localhost:3000",    // локальный фронт
+			"http://localhost:5173",    // Vite (если используешь)
+			"https://wvb.onrender.com", // swagger
+			"https://*.vercel.app",     // прод фронт
+		},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 
+	//ROUTES
 	//health check
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
+
 	//DATABASE READY CHECK
 	r.Get("/ready", func(w http.ResponseWriter, r *http.Request) {
-		// Проверяем подключение к БД
 		if err := db.Ping(); err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable) // 503
+			w.WriteHeader(http.StatusServiceUnavailable)
 			w.Write([]byte("Database unavailable"))
 			return
 		}
@@ -86,29 +100,11 @@ func main() {
 		w.Write([]byte("Ready"))
 	})
 
-	//CORS
-	////
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{
-			"http://localhost:3000",    // локальный фронт
-			"http://localhost:5173",    // Vite (если используешь)
-			"https://wvb.onrender.com", // swagger
-			"https://*.vercel.app",     // прод фронт
-			//"http://localhost:1313", // локальный фронт
-
-		},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
-		AllowCredentials: true,
-		MaxAge:           300,
-	}))
-	////
-
 	//swagger
 	r.Get("/swagger/*", httpSwagger.WrapHandler)
+
 	//GROUP ROUTE
 	r.Route("/", func(r chi.Router) {
-
 		r.Post("/login", userHandler.GetUser)
 		r.Post("/register", userHandler.CreateUser)
 		r.Get("/list", userHandler.ListUsers)
