@@ -30,7 +30,7 @@ import (
 // @BasePath /
 func main() {
 
-	//OPEN BD
+	//OPEN BD new
 	_ = godotenv.Load()
 	connStr := os.Getenv("DATABASE_URL")
 	if connStr == "" {
